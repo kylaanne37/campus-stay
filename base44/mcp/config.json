@@ -1,0 +1,40 @@
+{
+  "auth": "oauth",
+  "tools": {
+    "functions": [
+      {
+        "name": "create_listing",
+        "title": "Create listing",
+        "description": "Creates a new housing sublease listing on behalf of the signed-in verified student. Only callable by users with a .edu email. Pass the full listing payload; the server sets status, expiry, and availability timestamp.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string", "description": "Short headline for the listing." },
+            "term": { "type": "string", "enum": ["Spring Only", "Fall Only", "Summer"], "description": "Academic term the sublease covers." },
+            "year": { "type": "number", "description": "Calendar year of the term, e.g. 2027." },
+            "location": { "type": "string", "description": "General area or address of the property." },
+            "apartment_complex": { "type": "string", "description": "Optional name of the apartment complex." },
+            "lat": { "type": "number", "description": "Optional latitude for map pin." },
+            "lng": { "type": "number", "description": "Optional longitude for map pin." },
+            "base_rent": { "type": "number", "description": "Monthly base rent in USD." },
+            "utility_estimate": { "type": "number", "description": "Optional estimated monthly utilities in USD." },
+            "utilities_subsidized": { "type": "boolean", "description": "True if utilities are partly or fully included." },
+            "roommate_count": { "type": "number", "description": "Number of current roommates." },
+            "gender_makeup": { "type": "string", "enum": ["All-Female", "All-Male", "Mixed"], "description": "Gender makeup of the household." },
+            "roommates_bio": { "type": "string", "description": "Optional short bio of current roommates (max 2000 chars)." },
+            "pets": { "type": "boolean", "description": "True if pets are allowed." },
+            "parking_included": { "type": "boolean", "description": "True if parking is included." },
+            "cleanliness_vibe": { "type": "string", "description": "Optional one-line cleanliness description." },
+            "bio": { "type": "string", "description": "Optional longer description of the place (max 3000 chars)." },
+            "photos": { "type": "array", "items": { "type": "string" }, "description": "Array of photo URLs; at least one required." },
+            "contact_method": { "type": "string", "enum": ["instagram", "phone", "email"], "description": "How the host wants to be contacted." },
+            "contact_value": { "type": "string", "description": "The handle, phone, or email matching contact_method." }
+          },
+          "required": ["title", "term", "year", "location", "base_rent", "roommate_count", "gender_makeup", "photos", "contact_method", "contact_value"]
+        },
+        "handler": "createListing",
+        "annotations": { "read_only_hint": false, "destructive_hint": false, "idempotent_hint": false }
+      }
+    ]
+  }
+}

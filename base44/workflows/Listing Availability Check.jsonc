@@ -1,0 +1,78 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "Listing"
+    }
+  },
+  "name": "Listing Availability Check",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "listing_availability_check",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "wait_30d": {
+          "wait": "P30D",
+          "then": "send_check",
+          "x-base44": {
+            "title": "Wait 30 days",
+            "description": "After listing creation"
+          }
+        }
+      },
+      {
+        "send_check": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendAvailabilityCheckEmail",
+            "args": {
+              "listing_id": "${ .trigger.entity_id }",
+              "secret": "cs_avail_integrity_4f8b2e6a9c1d7f3e"
+            }
+          },
+          "then": "wait_3d",
+          "x-base44": {
+            "title": "Send availability check email",
+            "description": "Asks owner to confirm"
+          }
+        }
+      },
+      {
+        "wait_3d": {
+          "wait": "P3D",
+          "then": "send_reminder",
+          "x-base44": {
+            "title": "Wait 3 days",
+            "description": "For owner response"
+          }
+        }
+      },
+      {
+        "send_reminder": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendAvailabilityReminderEmail",
+            "args": {
+              "listing_id": "${ .trigger.entity_id }",
+              "secret": "cs_avail_integrity_4f8b2e6a9c1d7f3e"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send reminder if unconfirmed",
+            "description": "Only if owner hasn't confirmed"
+          }
+        }
+      }
+    ]
+  },
+  "description": "30 days after a listing is created, emails the owner to verify availability; sends a follow-up reminder 3 days later if they haven't confirmed."
+}

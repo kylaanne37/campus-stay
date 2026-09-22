@@ -1,0 +1,156 @@
+{
+  "name": "Listing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "term": {
+      "type": "string",
+      "enum": [
+        "Spring Only",
+        "Fall Only",
+        "Summer"
+      ],
+      "default": "Spring Only"
+    },
+    "year": {
+      "type": "number",
+      "default": 2027
+    },
+    "location": {
+      "type": "string"
+    },
+    "apartment_complex": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "base_rent": {
+      "type": "number"
+    },
+    "utility_estimate": {
+      "type": "number"
+    },
+    "utilities_subsidized": {
+      "type": "boolean",
+      "default": false
+    },
+    "roommate_count": {
+      "type": "number",
+      "default": 0
+    },
+    "gender_makeup": {
+      "type": "string",
+      "enum": [
+        "All-Female",
+        "All-Male",
+        "Mixed"
+      ],
+      "default": "Mixed"
+    },
+    "roommates_bio": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "pets": {
+      "type": "boolean",
+      "default": false
+    },
+    "parking_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "cleanliness_vibe": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string",
+      "maxLength": 3000
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "contact_method": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "phone",
+        "email"
+      ]
+    },
+    "contact_value": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "still_available_confirmed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_availability_check_sent_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "title",
+    "term",
+    "year",
+    "location",
+    "base_rent",
+    "roommate_count",
+    "gender_makeup",
+    "photos",
+    "contact_method",
+    "contact_value"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": null,
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
