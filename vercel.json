@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.base44.com/api/:path*"
+      "destination": "https://campus-stay-a08fe8cd.base44.app/api/:path*"
     },
     {
       "source": "/(.*)",
